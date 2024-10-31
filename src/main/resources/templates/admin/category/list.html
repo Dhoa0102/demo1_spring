@@ -7,12 +7,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
     <!-- CSS --> 
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet" /> 
+    <style>
+.page-item active{
+  background-color: linen;
+  color:blue;
+}
+
+
+</style>
     <!-- JavaScript --> 
     <script th:src="@{/js/bootstrap.js}"></script> 
 </head>
 <body>
 	<header th:replace="~{admin/fragments/header :: header}"></header>
-
+	<br>
 	<main layout:fragment="content">
 		<span th:text="#{iotstar.message.hello}"></span>
 		<a href="?language=en">English</a> |
@@ -49,17 +57,18 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="cate, STT : ${categoryPage.content}">
-						<td th:text="${STT.index + 1}" style="border: 5px solid red;">1</td>
-						<td th:text="${cate.images}" style="border: 5px solid red;">Image</td>
-						<td th:text="${cate.name}" style="border: 5px solid red;">Category Name</td>
-						<td th:text="${cate.status}" style="border: 5px solid red;">Status</td>
-						<td>
-							<a th:href="@{/admin/categories/edit/{id}(id=${cate.id})}">Edit</a>
-							<a th:href="@{/admin/categories/delete/{id}(id=${cate.id})}">Delete</a>
-						</td>
-					</tr>
-				</tbody>
+    <tr th:each="cate, STT : ${categoryPage.content}">
+        <td th:text="${categoryPage.number * categoryPage.size + STT.index + 1}" style="border: 5px solid red;">1</td>
+        <td th:text="${cate.images}" style="border: 5px solid red;">Image</td>
+        <td th:text="${cate.name}" style="border: 5px solid red;">Category Name</td>
+        <td th:text="${cate.status}" style="border: 5px solid red;">Status</td>
+        <td>
+            <a th:href="@{/admin/categories/edit/{id}(id=${cate.id})}">Edit</a>
+            <a th:href="@{/admin/categories/delete/{id}(id=${cate.id})}">Delete</a>
+        </td>
+    </tr>
+</tbody>
+
 			</table>
 		</div>
 
@@ -77,19 +86,21 @@
 
 		<!-- Pagination -->
 		<div th:if="${categoryPage != null && categoryPage.totalPages > 0}">
-			<ul style="list-style-type: none; padding: 0; display: flex; gap: 10px;">
-				<li th:each="pageNumber : ${pageNumbers}"
-					th:classappend="${pageNumber == categoryPage.number + 1} ? 'page-item active' : 'page-item'"
-					style="display: inline;">
-					<a th:href="@{/admin/categories/searchpaginated(name=${name},size=${categoryPage.size},page=${pageNumber})}"
-						th:text="${pageNumber}"
-						style="text-decoration: none; padding: 5px 10px; border: 1px solid #007bff; color: #007bff; border-radius: 5px;">
-						Page</a>
-				</li>
-			</ul>
-		</div>
-	</main>
+    <ul style="list-style-type: none; padding: 0; display: flex; gap: 10px;">
+        <li th:each="pageNumber : ${pageNumbers}"
+            th:classappend="${pageNumber == categoryPage.number + 1} ? 'page-item active' : 'page-item'"
+            style="display: inline;">
+            <a th:href="@{/admin/categories/searchpaginated(name=${name},size=${categoryPage.size},page=${pageNumber})}"
+               th:text="${pageNumber}"
+               style="text-decoration: none; padding: 5px 10px; border: 1px solid #007bff; color: #007bff; border-radius: 5px;"
+               th:styleappend="${pageNumber == categoryPage.number + 1} ? '; background-color: #007bff; color: white;' : ''">
+               Page</a>
+        </li>
+    </ul>
+</div>
 
+	</main>
+	<br>
 	<footer th:replace="~{admin/fragments/footer :: footer}"></footer>
 </body>
 </html>
